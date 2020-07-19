@@ -3,7 +3,7 @@ import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
-const FileUpload = () => {
+const FileUpload = ({ refreshFunction }) => {
   const [images, setImages] = useState([]);
   // 파일 전송 함수
   const onDropHandler = (files) => {
@@ -18,6 +18,7 @@ const FileUpload = () => {
       if (res.data.uploadSuccess) {
         // [기존 images 경로 + 새 업로드 이미지 경로]
         setImages([...images, res.data.filePath]);
+        refreshFunction([...images, res.data.filePath]);
       } else {
         alert('파일 업로드 실패');
       }
@@ -34,6 +35,8 @@ const FileUpload = () => {
     // Array.filter 사용
     //newImages = newImages.filter((img, index) => index !== currentIndex);
     //setImages([...newImages]);
+
+    refreshFunction([...newImages]);
   };
 
   return (

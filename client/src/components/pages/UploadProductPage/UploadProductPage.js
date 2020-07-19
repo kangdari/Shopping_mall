@@ -21,6 +21,7 @@ const UploadProductPage = () => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
   const [continent, setContinent] = useState(1);
+  const [images, setImages] = useState([]);
 
   const NameHandler = (e) => {
     setName(e.currentTarget.value);
@@ -34,6 +35,10 @@ const UploadProductPage = () => {
   const ContinentHanler = (e) => {
     setContinent(e.currentTarget.value);
   };
+  // FileUpload 컴포넌트(자식)의 상태를 전달받아 부모 컴포넌트의 상태 업데이트
+  const updataImages = (newImages) => {
+    setImages(newImages);
+  };
 
   return (
     <div>
@@ -43,7 +48,7 @@ const UploadProductPage = () => {
         </div>
         <Form>
           {/* Drop zone */}
-          <FileUpload />
+          <FileUpload refreshFunction={updataImages} />
           <br />
           <br />
           <label>이름</label>
