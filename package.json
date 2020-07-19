@@ -1,0 +1,26 @@
+{
+  "name": "login_register_form",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "cd server && yarn start",
+    "start": "concurrently --kill-others-on-fail \"yarn server\" \"npm run start --prefix client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kangdari/login_register_form.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kangdari/login_register_form/issues"
+  },
+  "homepage": "https://github.com/kangdari/login_register_form#readme",
+  "dependencies": {
+    "concurrently": "^5.2.0",
+    "styled-reset": "^4.2.1"
+  }
+}
