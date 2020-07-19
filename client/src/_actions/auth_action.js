@@ -14,5 +14,5 @@ export const authCheck = () => {
 // auth, user state 초기화
 export const logout = () => async (dispatch) => {
   dispatch({ type: LOGOUT });
-  await axios.get(`api/users/logout`);
+  await axios.get(`/api/users/logout`);
 };

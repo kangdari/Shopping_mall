@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const FileUpload = () => {
+  const [images, setImages] = useState([]);
   // 파일 전송 함수
   const onDropHandler = (files) => {
     // 파일 전송을 위한 기본 설정 값
@@ -13,8 +14,10 @@ const FileUpload = () => {
     };
     formData.append('file', files[0]);
 
-    axios.post('api/product/img', formData, config).then((res) => {
-      if (res.data.success) {
+    axios.post('/api/product/image', formData, config).then((res) => {
+      if (res.data.uploadSuccess) {
+        // [기존 images 경로 + 새 업로드 이미지 경로]
+        setImages([...images, res.data.filePath]);
       } else {
         alert('파일 업로드 실패');
       }
@@ -28,7 +31,7 @@ const FileUpload = () => {
           <div
             style={{
               width: 300,
-              height: 300,
+              height: 240,
               border: '1px solid lightgrey',
               display: 'flex',
               justifyContent: 'center',
@@ -41,6 +44,18 @@ const FileUpload = () => {
           </div>
         )}
       </Dropzone>
+
+      <div style={{ display: 'flex', width: '350px', height: '240px', overflowX: 'scroll' }}>
+        {images.map((image, index) => (
+          <div key={index}>
+            <img
+              style={{ minWidth: '350px', width: '350px', height: '240px' }}
+              src={`http://localhost:5050/${image}`}
+              alt='img'
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
