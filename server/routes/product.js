@@ -30,6 +30,18 @@ router.post('/', (req, res) => {
   });
 });
 
+// /api/product/products
+router.post('/products', (req, res) => {
+  // Product Collection에 있는 모든 정보 가져오기
+  Product.find()
+    .populate('writer') // writer(_id)에 해당하는 모든 정보를 가져옴
+    .exec((err, productsInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      //
+      return res.status(200).json({ success: true, productsInfo });
+    });
+});
+
 router.post('/image', (req, res) => {
   // 가져온 이미지 저장
   upload(req, res, (err) => {

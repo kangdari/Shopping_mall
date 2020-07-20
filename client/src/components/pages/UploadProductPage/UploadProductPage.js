@@ -52,7 +52,7 @@ const UploadProductPage = ({ auth, history }) => {
 
     const body = {
       // 현재 로그인 유저
-      wrter: auth._id,
+      writer: auth._id,
       title,
       description,
       price,
