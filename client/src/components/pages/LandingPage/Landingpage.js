@@ -1,35 +1,61 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { RocketOutlined } from '@ant-design/icons';
+import { Col, Card, Row, Carousel } from 'antd';
+const { Meta } = Card;
+
 const Landingpage = () => {
+  const [products, setProducts] = useState([]);
+
   useEffect(() => {
     // DB의 모든 상품 정보 가져오기
     axios.post('/api/product/products').then((res) => {
       if (res.data.success) {
-        alert('상품 가져오기 성공');
-        console.log(res.data.productsInfo);
+        setProducts(res.data.productsInfo);
       } else {
         alert('상품 불러오기 실패');
       }
     });
   }, []);
 
+  // 카드 렌더링 함수
+  const renderCards = products.map((product, index) => {
+    return (
+      <Col lg={6} md={8} xs={24} key={index}>
+        <Card
+          style={{ width: '100%', maxHeight: '150px' }}
+          cover={<img alt='product' src={`http://localhost:5050/${product.images[0]}`} />}
+        >
+          <Meta title={product.title} description={product.price} />
+        </Card>
+      </Col>
+    );
+  });
+
   return (
     <>
-      <LandingCondtainer>
-        <h2>Landingpage</h2>
-      </LandingCondtainer>
+      <div style={{ width: '75%', margin: '3rem auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h1>
+            Let's Travel Anywhere <RocketOutlined />
+          </h1>
+        </div>
+        {/* filter */}
+
+        {/* search */}
+
+        {/* cards */}
+
+        {/* 카드 렌더링 / Row: 24 사이즈*/}
+        <Row gutter={[16, 16]}>{renderCards}</Row>
+
+        <div style={{ display: 'flex', justifyContent: 'center ' }}>
+          <button>더보기</button>
+        </div>
+      </div>
     </>
   );
 };
-
-const LandingCondtainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default Landingpage;

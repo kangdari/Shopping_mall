@@ -1,5 +1,5 @@
 import React from 'react';
-import GlobalStyle from './GlobalStyle';
+// import GlobalStyle from './GlobalStyle';
 import { Route, Switch } from 'react-router-dom';
 import LandingPage from './components/pages/LandingPage/Landingpage';
 import LoginPage from './components/pages/LoginPage/LoginPage';
@@ -13,7 +13,7 @@ import Auth from './hoc/auth';
 function App() {
   return (
     <>
-      <GlobalStyle />
+      {/* <GlobalStyle /> */}
       <NavBar />
       {/* NavBar 높이만큼 패딩 값 설정 */}
       <div style={{ paddingTop: '61px' }}>
