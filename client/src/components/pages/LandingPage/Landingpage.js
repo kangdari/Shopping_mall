@@ -3,9 +3,10 @@ import axios from 'axios';
 import { PRODUCT_SERVER } from '../../../utils/serverRoute';
 
 import CheckBox from './Sections/CheckBox';
+import RadioBox from './Sections/RadioBox';
 import ImageSlider from '../../Common/ImageSlider';
 
-import { continents } from './Sections/data';
+import { continents, price } from './Sections/data';
 
 import { RocketOutlined } from '@ant-design/icons';
 import { Col, Card, Row } from 'antd';
@@ -63,7 +64,7 @@ const Landingpage = () => {
     return (
       <Col lg={6} md={8} xs={24} key={index}>
         <Card cover={<ImageSlider images={product.images} />}>
-          <Meta title={product.title} description={product.price} />
+          <Meta title={product.title} description={`$${product.price}`} />
         </Card>
       </Col>
     );
@@ -82,14 +83,35 @@ const Landingpage = () => {
     setSkip(0);
   };
 
+  const handlePrice = (value) => {
+    const data = price;
+    let arr = [];
+
+    for (let key in price) {
+      if (data[key].id === parseInt(value, 10)) {
+        // 해당 id의 가격의 범위
+        arr = data[key].array;
+      }
+    }
+
+    return arr;
+  };
+
   // category: continents, price 둘 중 하나
   const hadleFilters = (filters, category) => {
     const newFilters = { ...Filters };
     // filters: 체크된 아이디 배열
-    newFilters[category] = filters;
+
+    if (category === 'price') {
+      const priceValue = handlePrice(filters);
+      newFilters[category] = priceValue;
+    } else {
+      newFilters[category] = filters;
+    }
 
     // 필터 적용 후 결과물 렌더링
     showFilteredResult(newFilters);
+    setFilters(newFilters);
   };
 
   return (
@@ -102,13 +124,19 @@ const Landingpage = () => {
         </div>
         {/* filter */}
 
-        {/* CheckBox */}
-        <CheckBox
-          continents={continents}
-          // filters: 체크된 아이디 배열
-          hadleFilters={(filters) => hadleFilters(filters, 'continents')}
-        />
-        {/* RadioBox */}
+        <Row gutter={[16, 16]}>
+          <Col lg={12} xs={24}>
+            {/* CheckBox */}
+            <CheckBox
+              continents={continents}
+              // filters: 체크된 아이디 배열
+              hadleFilters={(filters) => hadleFilters(filters, 'continents')}
+            />
+          </Col>
+          <Col lg={12} xs={24}>
+            <RadioBox price={price} hadleFilters={(filters) => hadleFilters(filters, 'price')} />
+          </Col>
+        </Row>
 
         {/* search */}
 

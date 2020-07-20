@@ -29,6 +29,7 @@ const NavbarBlock = styled.div`
   padding: 10px 0;
   border-bottom: 1px solid ${palette.gray[3]};
   background: #fff;
+  z-index: 10;
 
   .navbar {
     width: 100%;

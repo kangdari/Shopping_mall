@@ -40,7 +40,17 @@ router.post('/products', (req, res) => {
   for (let key in req.body.filters) {
     // 체크된 아이템이 있는 경우
     if (req.body.filters[key].length > 0) {
-      findArgs[key] = req.body.filters[key];
+      if (key === 'price') {
+        findArgs[key] = {
+          // MongoDB 쿼리 옵션: $gte, $lte
+          // Greater than equal : 이상
+          $gte: req.body.filters[key][0],
+          // Less than equal : 이하
+          $lte: req.body.filters[key][1],
+        };
+      } else {
+        findArgs[key] = req.body.filters[key];
+      }
     }
   }
 
@@ -55,7 +65,6 @@ router.post('/products', (req, res) => {
     .limit(limit)
     .exec((err, productsInfo) => {
       if (err) return res.status(400).json({ success: false, err });
-      //
       return res.status(200).json({ success: true, productsInfo, dataSize: productsInfo.length });
     });
 });
