@@ -32,13 +32,20 @@ router.post('/', (req, res) => {
 
 // /api/product/products
 router.post('/products', (req, res) => {
+  const { skip, limit } = req.body;
+
+  // const limit = req.body.limit ? req.body.limit : 100;
+  // const skip = req.body.skip ? req.body.skip : 0;
+
   // Product Collection에 있는 모든 정보 가져오기
   Product.find()
     .populate('writer') // writer(_id)에 해당하는 모든 정보를 가져옴
+    .skip(skip)
+    .limit(limit)
     .exec((err, productsInfo) => {
       if (err) return res.status(400).json({ success: false, err });
       //
-      return res.status(200).json({ success: true, productsInfo });
+      return res.status(200).json({ success: true, productsInfo, dataSize: productsInfo.length });
     });
 });
 

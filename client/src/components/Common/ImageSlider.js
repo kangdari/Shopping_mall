@@ -10,6 +10,7 @@ const ImageSlider = ({ images }) => {
             <img
               style={{ width: '100%', maxHeight: '150px' }}
               src={`http://localhost:5050/${image}`}
+              alt='img'
             />
           </div>
         ))}
