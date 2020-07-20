@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { PRODUCT_SERVER } from '../../utils/serverRoute';
 
 const FileUpload = ({ refreshFunction }) => {
   const [images, setImages] = useState([]);
@@ -14,7 +15,7 @@ const FileUpload = ({ refreshFunction }) => {
     };
     formData.append('file', files[0]);
 
-    axios.post('/api/product/image', formData, config).then((res) => {
+    axios.post(`${PRODUCT_SERVER}/image`, formData, config).then((res) => {
       if (res.data.uploadSuccess) {
         // [기존 images 경로 + 새 업로드 이미지 경로]
         setImages([...images, res.data.filePath]);

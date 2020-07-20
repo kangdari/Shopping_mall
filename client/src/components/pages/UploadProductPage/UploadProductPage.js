@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Typography, Input } from 'antd';
 
 import FileUpload from '../../Common/FileUpload';
-import Axios from 'axios';
+import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import { PRODUCT_SERVER } from '../../../utils/serverRoute';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -57,11 +58,11 @@ const UploadProductPage = ({ auth, history }) => {
       description,
       price,
       images,
-      continent,
+      continents: continent,
     };
 
     // 서버에 데이터 요청
-    Axios.post('/api/product', body).then((res) => {
+    axios.post(`${PRODUCT_SERVER}`, body).then((res) => {
       if (res.data.productSuccess) {
         alert('상품 업로드 성공');
         history.push('/');

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { AUTH_CHECK, LOGOUT } from './types';
+import { USER_SERVER } from '../utils/serverRoute';
 
 export const authCheck = () => {
-  const request = axios.get(`/api/users/auth`).then((res) => res.data);
+  const request = axios.get(`${USER_SERVER}/auth`).then((res) => res.data);
 
   return {
     type: AUTH_CHECK,
@@ -14,5 +15,5 @@ export const authCheck = () => {
 // auth, user state 초기화
 export const logout = () => async (dispatch) => {
   dispatch({ type: LOGOUT });
-  await axios.get(`/api/users/logout`);
+  await axios.get(`${USER_SERVER}/logout`);
 };

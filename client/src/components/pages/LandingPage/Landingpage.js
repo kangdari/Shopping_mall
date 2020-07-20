@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { PRODUCT_SERVER } from '../../../utils/serverRoute';
 
 import CheckBox from './Sections/CheckBox';
 import ImageSlider from '../../Common/ImageSlider';
@@ -40,7 +41,7 @@ const Landingpage = () => {
 
   // DB의 모든 상품 정보 가져오기
   const getProduct = (body) => {
-    axios.post('/api/product/products', body).then((res) => {
+    axios.post(`${PRODUCT_SERVER}/products`, body).then((res) => {
       if (res.data.success) {
         // 더보기 버튼을 클릭 시
         if (body.loadMore) {

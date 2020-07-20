@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
 // /api/product/products
 router.post('/products', (req, res) => {
   const { skip, limit } = req.body;
-  console.log(req.body.filters);
+  // console.log(req.body.filters);
 
   // find() 매개변수 : 쿼리
   const findArgs = {};

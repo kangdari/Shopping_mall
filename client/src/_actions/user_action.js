@@ -7,12 +7,13 @@ import {
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAILUER,
 } from './types';
+import { USER_SERVER } from '../utils/serverRoute';
 
 export const loginUser = (dataToSubmit) => async (dispatch) => {
   dispatch({ type: LOGIN_USER });
 
   try {
-    const res = await axios.post('/api/users/login', dataToSubmit);
+    const res = await axios.post(`${USER_SERVER}/login`, dataToSubmit);
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: res.data,
@@ -28,7 +29,7 @@ export const loginUser = (dataToSubmit) => async (dispatch) => {
 export const registerUser = (dataToSubmit) => async (dispatch) => {
   dispatch({ type: REGISTER_USER });
   try {
-    const res = await axios.post('/api/users/register', dataToSubmit);
+    const res = await axios.post(`${USER_SERVER}/register`, dataToSubmit);
     dispatch({
       type: REGISTER_USER_SUCCESS,
       payload: res.data,
