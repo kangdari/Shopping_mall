@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Button, Form, Input } from 'antd';
+import { Typography, Input } from 'antd';
 
 import FileUpload from '../../Common/FileUpload';
 import Axios from 'axios';

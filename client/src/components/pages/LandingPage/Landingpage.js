@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import CheckBox from './Sections/CheckBox';
+import ImageSlider from '../../Common/ImageSlider';
+
+import { continents } from './Sections/data';
+
 import { RocketOutlined } from '@ant-design/icons';
 import { Col, Card, Row } from 'antd';
-import ImageSlider from '../../Common/ImageSlider';
 const { Meta } = Card;
 
 const Landingpage = () => {
@@ -11,6 +15,10 @@ const Landingpage = () => {
   const [skip, setSkip] = useState(0); // 서버에서 불러올 데이터의 첫 인덱스 값
   const [limit, setLimit] = useState(8); // 한번에 보여지는 product 수
   const [dataSize, setDataSize] = useState(); // 서버에서 불러온 post 수
+  const [Filters, setFilters] = useState({
+    continents: [],
+    price: [],
+  });
 
   useEffect(() => {
     let body = { skip, limit };
@@ -60,6 +68,29 @@ const Landingpage = () => {
     );
   });
 
+  // filter한 데이터를 서버에 요청
+  const showFilteredResult = (filters) => {
+    // filters: 체크된 아이디 배열
+    const body = {
+      skip: 0,
+      limit: 8,
+      filters,
+    };
+
+    getProduct(body);
+    setSkip(0);
+  };
+
+  // category: continents, price 둘 중 하나
+  const hadleFilters = (filters, category) => {
+    const newFilters = { ...Filters };
+    // filters: 체크된 아이디 배열
+    newFilters[category] = filters;
+
+    // 필터 적용 후 결과물 렌더링
+    showFilteredResult(newFilters);
+  };
+
   return (
     <>
       <div style={{ width: '75%', margin: '3rem auto' }}>
@@ -69,6 +100,14 @@ const Landingpage = () => {
           </h1>
         </div>
         {/* filter */}
+
+        {/* CheckBox */}
+        <CheckBox
+          continents={continents}
+          // filters: 체크된 아이디 배열
+          hadleFilters={(filters) => hadleFilters(filters, 'continents')}
+        />
+        {/* RadioBox */}
 
         {/* search */}
 

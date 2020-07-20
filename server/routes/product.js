@@ -33,12 +33,23 @@ router.post('/', (req, res) => {
 // /api/product/products
 router.post('/products', (req, res) => {
   const { skip, limit } = req.body;
+  console.log(req.body.filters);
+
+  // find() 매개변수 : 쿼리
+  const findArgs = {};
+  for (let key in req.body.filters) {
+    // 체크된 아이템이 있는 경우
+    if (req.body.filters[key].length > 0) {
+      findArgs[key] = req.body.filters[key];
+    }
+  }
 
   // const limit = req.body.limit ? req.body.limit : 100;
   // const skip = req.body.skip ? req.body.skip : 0;
 
-  // Product Collection에 있는 모든 정보 가져오기
-  Product.find()
+  // Product Collection에 있는 정보 가져오기
+  // find(findArgs) : findArgs 쿼리에 해당하는 것을 조회, findArgs 값이 없으면 전체 조회
+  Product.find(findArgs)
     .populate('writer') // writer(_id)에 해당하는 모든 정보를 가져옴
     .skip(skip)
     .limit(limit)
