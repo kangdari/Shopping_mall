@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authCheck } from '../_actions/auth_action';
 
 export default (SpecificComponent, option, adminRoute = null) => {
@@ -10,6 +10,8 @@ export default (SpecificComponent, option, adminRoute = null) => {
 
   const AuthenticationCheck = ({ history }) => {
     const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth.auth);
+
     useEffect(() => {
       dispatch(authCheck()).then((res) => {
         // 로그인 x 상태
@@ -31,7 +33,7 @@ export default (SpecificComponent, option, adminRoute = null) => {
       });
     }, [history, dispatch]);
     // 컴포넌트를 반환
-    return <SpecificComponent />;
+    return <SpecificComponent auth={auth} />;
   };
 
   return AuthenticationCheck;
