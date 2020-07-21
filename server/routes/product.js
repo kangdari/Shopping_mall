@@ -32,8 +32,10 @@ router.post('/', (req, res) => {
 
 // /api/product/products
 router.post('/products', (req, res) => {
-  const { skip, limit } = req.body;
-  // console.log(req.body.filters);
+  const { skip, limit, searchValue } = req.body;
+  // const limit = req.body.limit ? req.body.limit : 100;
+  // const skip = req.body.skip ? req.body.skip : 0;
+  // const searchValue = req.body.searchValue
 
   // find() 매개변수 : 쿼리
   const findArgs = {};
@@ -49,24 +51,37 @@ router.post('/products', (req, res) => {
           $lte: req.body.filters[key][1],
         };
       } else {
+        // contenents
         findArgs[key] = req.body.filters[key];
       }
     }
   }
 
-  // const limit = req.body.limit ? req.body.limit : 100;
-  // const skip = req.body.skip ? req.body.skip : 0;
-
-  // Product Collection에 있는 정보 가져오기
-  // find(findArgs) : findArgs 쿼리에 해당하는 것을 조회, findArgs 값이 없으면 전체 조회
-  Product.find(findArgs)
-    .populate('writer') // writer(_id)에 해당하는 모든 정보를 가져옴
-    .skip(skip)
-    .limit(limit)
-    .exec((err, productsInfo) => {
-      if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true, productsInfo, dataSize: productsInfo.length });
-    });
+  // 검색어가 있다면
+  if (searchValue) {
+    Product.find(findArgs)
+      // .find({ $text: { $search: searchValue } }) // searchValue 단어로 검색 , searchValue 단어로만 검색 됨
+      .find({ title: { $regex: searchValue } }) // 정규식을 이용한 특정 문자 포함 검색, searchValue 포함되면 검색 됨
+      .populate('writer') // writer(_id)에 해당하는 모든 정보를 가져옴
+      .skip(skip)
+      .limit(limit)
+      .exec((err, productsInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({ success: true, productsInfo, dataSize: productsInfo.length });
+      });
+  } else {
+    // 검색어가 없다면
+    // Product Collection에 있는 정보 가져오기
+    // find(findArgs) : findArgs 쿼리에 해당하는 것을 조회, findArgs 값이 없으면 전체 조회
+    Product.find(findArgs)
+      .populate('writer') // writer(_id)에 해당하는 모든 정보를 가져옴
+      .skip(skip)
+      .limit(limit)
+      .exec((err, productsInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({ success: true, productsInfo, dataSize: productsInfo.length });
+      });
+  }
 });
 
 router.post('/image', (req, res) => {

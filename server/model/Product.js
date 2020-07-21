@@ -42,6 +42,21 @@ const productSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// .find({ $text: { $search: searchValue } })
+// 검색 가중치 설정
+productSchema.index(
+  {
+    title: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      title: 5,
+      description: 1,
+    },
+  }
+);
+
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = { Product };

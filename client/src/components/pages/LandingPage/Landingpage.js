@@ -4,6 +4,7 @@ import { PRODUCT_SERVER } from '../../../utils/serverRoute';
 
 import CheckBox from './Sections/CheckBox';
 import RadioBox from './Sections/RadioBox';
+import SearchBox from './Sections/SearchBox';
 import ImageSlider from '../../Common/ImageSlider';
 
 import { continents, price } from './Sections/data';
@@ -21,6 +22,7 @@ const Landingpage = () => {
     continents: [],
     price: [],
   });
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     let body = { skip, limit };
@@ -114,6 +116,21 @@ const Landingpage = () => {
     setFilters(newFilters);
   };
 
+  // SearchBox에서 검색한 값
+  const updateSearchValue = (newSearchValue) => {
+    const body = {
+      skip: 0, // db 처음부터 검색
+      limit: 8,
+      filters: Filters, // 기존 필터 유지하면서 검색
+      searchValue: newSearchValue,
+    };
+
+    setSkip(0);
+    setSearchValue(newSearchValue);
+
+    getProduct(body);
+  };
+
   return (
     <>
       <div style={{ width: '75%', margin: '3rem auto' }}>
@@ -123,7 +140,6 @@ const Landingpage = () => {
           </h1>
         </div>
         {/* filter */}
-
         <Row gutter={[16, 16]}>
           <Col lg={12} xs={24}>
             {/* CheckBox */}
@@ -139,8 +155,9 @@ const Landingpage = () => {
         </Row>
 
         {/* search */}
-
-        {/* cards */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
+          <SearchBox refreshFunction={updateSearchValue} />
+        </div>
 
         {/* 카드 렌더링 / Row: 24 사이즈*/}
         <Row gutter={[16, 16]}>{renderCards}</Row>
