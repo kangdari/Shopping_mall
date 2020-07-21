@@ -31,6 +31,7 @@ router.post('/', (req, res) => {
 });
 
 // /api/product/products
+// 모든, filter 처리된 여러개의 products 정보 가져오기
 router.post('/products', (req, res) => {
   const { skip, limit, searchValue } = req.body;
   // const limit = req.body.limit ? req.body.limit : 100;
@@ -82,6 +83,19 @@ router.post('/products', (req, res) => {
         return res.status(200).json({ success: true, productsInfo, dataSize: productsInfo.length });
       });
   }
+});
+
+// product 상제 정보 조회
+router.get('/product_id', (req, res) => {
+  const { productId, type } = req.query;
+
+  // productId로 db에서 조회하여 상품 상세 정보 가져오기
+  Product.find({ _id: productId })
+    .populate('writer')
+    .exec((err, productInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, productInfo });
+    });
 });
 
 router.post('/image', (req, res) => {

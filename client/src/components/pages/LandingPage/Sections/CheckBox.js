@@ -36,7 +36,7 @@ const CheckBox = ({ continents, hadleFilters }) => {
     ));
 
   return (
-    <Collapse defaultActiveKey={['1']}>
+    <Collapse defaultActiveKey={['0']}>
       <Panel header='Continents' key='1'>
         {rederCheckboxList(continents)}
       </Panel>

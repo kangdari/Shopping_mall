@@ -5,6 +5,7 @@ import LandingPage from './components/pages/LandingPage/Landingpage';
 import LoginPage from './components/pages/LoginPage/LoginPage';
 import RegisterPage from './components/pages/RegisterPage/RegisterPage';
 import UploadProductPage from './components/pages/UploadProductPage/UploadProductPage';
+import DetailProductPage from './components/pages/DetailProuctPage/DetailProductPage';
 
 import NavBar from './components/Navbar/Navbar';
 
@@ -19,9 +20,10 @@ function App() {
       <div style={{ paddingTop: '61px' }}>
         <Switch>
           <Route path='/' component={Auth(LandingPage, null)} exact />
-          <Route path='/login' component={Auth(LoginPage, false)} exact />
-          <Route path='/register' component={Auth(RegisterPage, false)} exact />
-          <Route path='/product/upload' component={Auth(UploadProductPage, true)} exact />
+          <Route path='/login' component={Auth(LoginPage, false)} />
+          <Route path='/register' component={Auth(RegisterPage, false)} />
+          <Route path='/product/upload' component={Auth(UploadProductPage, true)} />
+          <Route path='/product/:productId' component={Auth(DetailProductPage, null)} />
         </Switch>
       </div>
     </>

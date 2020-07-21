@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { PRODUCT_SERVER } from '../../../utils/serverRoute';
 
 import CheckBox from './Sections/CheckBox';
@@ -64,8 +65,14 @@ const Landingpage = () => {
   // 카드 렌더링 함수
   const renderCards = products.map((product, index) => {
     return (
-      <Col lg={6} md={8} xs={24} key={index}>
-        <Card cover={<ImageSlider images={product.images} />}>
+      <Col lg={6} md={8} xs={24} key={product._id}>
+        <Card
+          cover={
+            <Link to={`/product/${product._id}`}>
+              <ImageSlider images={product.images} />
+            </Link>
+          }
+        >
           <Meta title={product.title} description={`$${product.price}`} />
         </Card>
       </Col>
