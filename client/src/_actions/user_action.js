@@ -7,8 +7,9 @@ import {
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAILUER,
   ADD_TO_CART,
+  GET_CART_PRODUCTS,
 } from './types';
-import { USER_SERVER } from '../utils/serverRoute';
+import { USER_SERVER, PRODUCT_SERVER } from '../utils/serverRoute';
 
 export const loginUser = (dataToSubmit) => async (dispatch) => {
   dispatch({ type: LOGIN_USER });
@@ -52,6 +53,35 @@ export const addToCart = (id) => {
 
   return {
     type: ADD_TO_CART,
+    payload: request,
+  };
+};
+
+// CartPage: 서버에서 여러개의 Product 정보 가져오기
+// cartItems : Product 컬렉션의 상세 정보
+// userCartInfo: User 컬렉션 중 cart 정보
+export const getCartProducts = (cartItems, userCartInfo) => {
+  // 여러개의 Product 정보를 가져오므로 type=array
+  const request = axios
+    .get(`${PRODUCT_SERVER}/product_id?productId=${cartItems}&type=array`)
+    .then((res) => {
+      // cartItem에 해당하는 정보들을 Product 컬렉션에서 가져와
+      // User 컬렉션의 cart.quantity 정보를 넣어준다
+      userCartInfo.forEach((userCartItem) => {
+        res.data.productInfo.forEach((productDetail, index) => {
+          // Product의 id와 userCartItem id가 같은지 확인
+          // 즉, 서로 같은 상품인지 확인하여 같으면 quantity 추가
+          if (userCartItem.id === productDetail._id) {
+            res.data.productInfo[index].quantity = userCartItem.quantity;
+          }
+        });
+      });
+      // reducer에 전달
+      return res.data.productInfo;
+    });
+
+  return {
+    type: GET_CART_PRODUCTS,
     payload: request,
   };
 };

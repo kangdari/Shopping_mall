@@ -11,6 +11,7 @@ const DetailProductPage = ({ match }) => {
   const [product, setProduct] = useState({});
 
   useEffect(() => {
+    // Product 하나의 정보만 가져오므로 type=single
     axios.get(`${PRODUCT_SERVER}/product_id?productId=${productId}&type=single`).then((res) => {
       if (res.data.success) {
         // 서버에서 가져온 상세 정보를 state로 저장
@@ -20,8 +21,6 @@ const DetailProductPage = ({ match }) => {
       }
     });
   }, [productId]);
-
-  // console.log(product);
 
   return (
     <div style={{ width: '100%', padding: '3rem 4rem' }}>

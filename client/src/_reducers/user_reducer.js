@@ -1,18 +1,19 @@
 import { handleActions } from 'redux-actions';
 import {
-  // LOGIN_USER,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILUER,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAILUER,
   LOGOUT,
   ADD_TO_CART,
+  AUTH_CHECK,
+  GET_CART_PRODUCTS,
 } from '../_actions/types';
 
 const initialState = {
   userError: '', // 에러
   userInfo: '', // 로그인, 회원가입 성공 여부
-  cartInfo: '',
+  cartDeatilInfo: '',
 };
 
 const user = handleActions(
@@ -46,6 +47,15 @@ const user = handleActions(
         ...state.userInfo,
         cart: action.payload,
       },
+    }),
+    [GET_CART_PRODUCTS]: (state, action) => ({
+      ...state,
+      cartDeatilInfo: action.payload,
+    }),
+    // AUTH_CHECK 액션 발생 시 user 상태도 업데이트
+    [AUTH_CHECK]: (state, action) => ({
+      ...state,
+      userInfo: action.payload,
     }),
   },
   initialState

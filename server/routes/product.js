@@ -86,11 +86,18 @@ router.post('/products', (req, res) => {
 });
 
 // product 상제 정보 조회
+// type: single 한개의 product 조회 // array: 여러 개의 product 조회
 router.get('/product_id', (req, res) => {
-  const { productId, type } = req.query;
+  let { productId, type } = req.query;
 
+  if (type === 'array') {
+    const ids = productId.split(',');
+    productId = ids.map((id) => id);
+    // productId = ids;
+  }
   // productId로 db에서 조회하여 상품 상세 정보 가져오기
-  Product.find({ _id: productId })
+  // ${in}: 주어진 배열 안에 속하는 값
+  Product.find({ _id: { $in: productId } })
     .populate('writer')
     .exec((err, productInfo) => {
       if (err) return res.status(400).json({ success: false, err });

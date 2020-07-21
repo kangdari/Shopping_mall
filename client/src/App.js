@@ -6,6 +6,7 @@ import LoginPage from './components/pages/LoginPage/LoginPage';
 import RegisterPage from './components/pages/RegisterPage/RegisterPage';
 import UploadProductPage from './components/pages/UploadProductPage/UploadProductPage';
 import DetailProductPage from './components/pages/DetailProuctPage/DetailProductPage';
+import CartPage from './components/pages/CartPage/CartPage';
 
 import NavBar from './components/Navbar/Navbar';
 
@@ -24,6 +25,7 @@ function App() {
           <Route path='/register' component={Auth(RegisterPage, false)} />
           <Route path='/product/upload' component={Auth(UploadProductPage, true)} />
           <Route path='/product/:productId' component={Auth(DetailProductPage, null)} />
+          <Route path='/user/cart' component={Auth(CartPage, true)} />
         </Switch>
       </div>
     </>
