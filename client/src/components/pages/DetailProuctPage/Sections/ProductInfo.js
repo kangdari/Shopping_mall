@@ -1,8 +1,16 @@
 import React from 'react';
 import { Descriptions, Button } from 'antd';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../../../_actions/user_action';
 
 const ProductInfo = ({ product }) => {
-  const ClickHandler = (e) => {};
+  const dispatch = useDispatch();
+  const ClickHandler = (e) => {
+    // 필요한 정보를 cart 필드에 삽입
+    // 상품 id, 수량, 시간(날짜
+    // product.id, quantity, date
+    dispatch(addToCart(product._id));
+  };
 
   return (
     <>

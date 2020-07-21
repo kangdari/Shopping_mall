@@ -9,3 +9,5 @@ export const REGISTER_USER_FAILUER = 'REGISTER_USER_FAILUER';
 export const AUTH_CHECK = 'AUTH_CHECK';
 
 export const LOGOUT = 'LOGOUT';
+
+export const ADD_TO_CART = 'ADD_TO_CART';

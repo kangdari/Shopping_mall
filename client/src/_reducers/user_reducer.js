@@ -6,11 +6,13 @@ import {
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAILUER,
   LOGOUT,
+  ADD_TO_CART,
 } from '../_actions/types';
 
 const initialState = {
   userError: '', // 에러
   userInfo: '', // 로그인, 회원가입 성공 여부
+  cartInfo: '',
 };
 
 const user = handleActions(
@@ -37,6 +39,13 @@ const user = handleActions(
     [LOGOUT]: (state) => ({
       ...state,
       userInfo: '',
+    }),
+    [ADD_TO_CART]: (state, action) => ({
+      ...state,
+      userInfo: {
+        ...state.userInfo,
+        cart: action.payload,
+      },
     }),
   },
   initialState

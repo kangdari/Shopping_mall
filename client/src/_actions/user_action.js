@@ -6,6 +6,7 @@ import {
   REGISTER_USER,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAILUER,
+  ADD_TO_CART,
 } from './types';
 import { USER_SERVER } from '../utils/serverRoute';
 
@@ -40,4 +41,17 @@ export const registerUser = (dataToSubmit) => async (dispatch) => {
       payload: err,
     });
   }
+};
+
+export const addToCart = (id) => {
+  const body = {
+    productId: id,
+  };
+
+  const request = axios.post(`${USER_SERVER}/addToCart`, body).then((res) => res.data);
+
+  return {
+    type: ADD_TO_CART,
+    payload: request,
+  };
 };

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../model/Users');
 const { auth } = require('../middleware/auth');
+const { request } = require('express');
 
 // users
 
@@ -59,6 +60,7 @@ router.get('/auth', auth, (req, res) => {
     isAuth: true,
     role: req.user.role,
     image: req.user.image,
+    cart: req.user.cart,
   });
 });
 
@@ -68,6 +70,53 @@ router.get('/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
     if (err) return res.json({ logoutSuccess: false, err });
     return res.status(200).json({ logoutSuccess: true });
+  });
+});
+
+router.post('/addToCart', auth, (req, res) => {
+  // User 콜렉션에서 해당 유저의 정보 가져오기
+
+  User.findOne({ _id: req.user._id }, (err, userInfo) => {
+    let duplicate = false; // 카트 상품 중복 여부
+    // 가져온 정보에서 카트에 이미 상품이 들어있는지 확인
+    userInfo.cart.forEach((item) => {
+      if (item.id === req.body.productId) {
+        duplicate = true;
+      }
+    });
+
+    // 상품이 이미 있으면 갯수만 + 1
+    if (duplicate) {
+      User.findOneAndUpdate(
+        // 찾아서 업데이트
+        { _id: req.user._id, 'cart.id': req.body.productId }, // 유저를 찾고 카트에서 해당 제품을 찾은 뒤
+        { $inc: { 'cart.$.quantity': 1 } }, // 카트의 quantity를 1 증가($increment)
+        { new: true }, // 업데이트한 정보를 받기 위한 옵션 값
+        (err, userInfo) => {
+          if (err) return res.status(400).json({ success: false, err });
+          res.status(200).send(userInfo.cart);
+        }
+      );
+    } else {
+      // 상품이 없으면 카트 필드에 (상품 정보: id, 1개 갯수, 날짜 정보)를 넣어줌
+      User.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $push: {
+            cart: {
+              id: req.body.productId,
+              quantity: 1,
+              data: Date.now(),
+            },
+          },
+        },
+        { new: true },
+        (err, userInfo) => {
+          if (err) return res.status(400).json({ success: false, err });
+          res.status(200).send(userInfo.cart);
+        }
+      );
+    }
   });
 });
 

@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { AUTH_CHECK, LOGOUT } from '../_actions/types';
+import { AUTH_CHECK, LOGOUT, ADD_TO_CART } from '../_actions/types';
 
 const initialState = {
   auth: '',
@@ -15,6 +15,13 @@ const auth = handleActions(
       ...state,
       auth: {
         isAuth: '',
+      },
+    }),
+    [ADD_TO_CART]: (state, action) => ({
+      ...state,
+      auth: {
+        ...state.auth,
+        cart: action.payload,
       },
     }),
   },

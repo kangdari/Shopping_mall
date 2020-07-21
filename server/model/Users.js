@@ -21,6 +21,14 @@ const userSchema = mongoose.Schema({
     type: Number,
     default: 0, // 기본 값
   },
+  cart: {
+    type: Array,
+    default: [],
+  },
+  history: {
+    type: Array,
+    default: [],
+  },
   image: String,
   token: String, // 토근
   tokenExp: Number, // 토근 유효  기간

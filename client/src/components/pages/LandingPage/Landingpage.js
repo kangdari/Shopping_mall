@@ -23,7 +23,7 @@ const Landingpage = () => {
     continents: [],
     price: [],
   });
-  const [searchValue, setSearchValue] = useState('');
+  // const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     let body = { skip, limit };
@@ -120,7 +120,7 @@ const Landingpage = () => {
 
     // 필터 적용 후 결과물 렌더링
     showFilteredResult(newFilters);
-    setFilters(newFilters);
+    setFilters(Filters);
   };
 
   // SearchBox에서 검색한 값
@@ -133,8 +133,7 @@ const Landingpage = () => {
     };
 
     setSkip(0);
-    setSearchValue(newSearchValue);
-
+    // setSearchValue(newSearchValue);
     getProduct(body);
   };
 
