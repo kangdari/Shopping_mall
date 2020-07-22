@@ -64,7 +64,6 @@ const UploadProductPage = ({ auth, history }) => {
     // 서버에 데이터 요청
     axios.post(`${PRODUCT_SERVER}`, body).then((res) => {
       if (res.data.productSuccess) {
-        alert('상품 업로드 성공');
         history.push('/');
       } else {
         alert('상품 업로드 실패');
