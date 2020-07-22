@@ -55,7 +55,12 @@ const user = handleActions(
     }),
     [REMOVE_CART_ITEM]: (state, action) => ({
       ...state,
-      cartDeatilInfo: action.payload,
+      userInfo: {
+        ...state.userInfo,
+        cart: action.payload.cartInfo,
+      },
+      // productInfo = cartInfo + user의 cart quantity
+      cartDeatilInfo: action.payload.productInfo,
     }),
     // AUTH_CHECK 액션 발생 시 user 상태도 업데이트
     [AUTH_CHECK]: (state, action) => ({

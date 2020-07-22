@@ -4,7 +4,7 @@ import { getCartProducts } from '../../../_actions/user_action';
 import UserCardBlock from './Sections/UserCardBlock';
 import { removeCartItem } from '../../../_actions/user_action';
 
-const CartPage = (user) => {
+const CartPage = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const cartDeatilInfo = useSelector((state) => state.user.cartDeatilInfo);
@@ -37,7 +37,7 @@ const CartPage = (user) => {
 
   // 장바구니 상품 제거 버튼
   const removeFromCart = (productId) => {
-    dispatch(removeCartItem(productId));
+    dispatch(removeCartItem(productId)).then((res) => console.log(res));
   };
 
   return (

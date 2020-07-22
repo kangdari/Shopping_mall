@@ -99,7 +99,7 @@ export const removeCartItem = (productId) => {
         }
       });
     });
-    return res.data.productInfo;
+    return res.data;
   });
 
   // 리듀서 상태 업데이트
