@@ -4,6 +4,7 @@ import { getCartProducts } from '../../../_actions/user_action';
 import UserCardBlock from './Sections/UserCardBlock';
 import { removeCartItem } from '../../../_actions/user_action';
 import { Empty } from 'antd';
+import Paypal from '../../Common/Paypal';
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -60,8 +61,10 @@ const CartPage = () => {
         <div style={{ marginTop: '2rem' }}>
           <Empty />
           <span>No Item In the Cart</span>
+          {/*  */}
         </div>
       )}
+      <Paypal />
     </div>
   );
 };
