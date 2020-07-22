@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../model/Users');
+const { Product } = require('../model/Product');
 const { auth } = require('../middleware/auth');
 const { request } = require('express');
 
@@ -103,6 +104,7 @@ router.post('/addToCart', auth, (req, res) => {
       User.findOneAndUpdate(
         { _id: req.user._id },
         {
+          // 추가
           $push: {
             cart: {
               id: req.body.productId,
@@ -111,6 +113,7 @@ router.post('/addToCart', auth, (req, res) => {
             },
           },
         },
+        // 업데이트 된 정보를 가져옴
         { new: true },
         (err, userInfo) => {
           if (err) return res.status(400).json({ success: false, err });
@@ -119,6 +122,42 @@ router.post('/addToCart', auth, (req, res) => {
       );
     }
   });
+});
+
+router.get('/removeFromCart', auth, (req, res) => {
+  // 장바구니에서 삭제 버튼을 누른 상품의 id
+  const { productId } = req.query;
+  // cart 안에서 삭제한 상품 User 컬렉션의 user.cart에서 제거
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      // 삭제
+      $pull: {
+        // cart filed
+        cart: {
+          id: productId,
+        },
+      },
+    },
+    // 상품을 삭제하고 업데이트 된 정보를 가져옴
+    { new: true },
+    // userInfo: 업데이트 된 정보
+    (err, userInfo) => {
+      const cartInfo = userInfo.cart;
+      const idsArr = cartInfo.map((item) => item.id);
+
+      // Product 컬렉션에서 현재 남아있는 상품들의 정보를 다시 가져와
+      // 리덕스 스토어의 cartDetailInfo의 상태를 업데이트 ( 삭제한 상품을 제거 ) = Product + User.cart.quantity
+
+      // 업데이트 된 User.cart의 id 값에 해당하는(삭제하고 남은) Product들을 찾아서 리턴
+      Product.find({ _id: { $in: idsArr } })
+        .populate('writer')
+        .exec((err, productInfo) => {
+          if (err) res.status(400).json({ success: false, err });
+          return res.status(200).json({ cartInfo, productInfo });
+        });
+    }
+  );
 });
 
 module.exports = router;

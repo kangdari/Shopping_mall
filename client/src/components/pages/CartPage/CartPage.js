@@ -37,9 +37,7 @@ const CartPage = (user) => {
 
   // 장바구니 상품 제거 버튼
   const removeFromCart = (productId) => {
-    dispatch(removeCartItem(productId)).then((res) => {
-      console.log(res);
-    });
+    dispatch(removeCartItem(productId));
   };
 
   return (
@@ -53,9 +51,5 @@ const CartPage = (user) => {
     </div>
   );
 };
-
-// 삭제 버튼을 누르면 id에 해당하는 상품을 db에서 삭제
-
-// 1. User 컬렉션에서  user.cart에서 해당하는 id의 상품을 제거
 
 export default CartPage;

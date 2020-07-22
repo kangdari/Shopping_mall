@@ -8,6 +8,7 @@ import {
   ADD_TO_CART,
   AUTH_CHECK,
   GET_CART_PRODUCTS,
+  REMOVE_CART_ITEM,
 } from '../_actions/types';
 
 const initialState = {
@@ -49,6 +50,10 @@ const user = handleActions(
       },
     }),
     [GET_CART_PRODUCTS]: (state, action) => ({
+      ...state,
+      cartDeatilInfo: action.payload,
+    }),
+    [REMOVE_CART_ITEM]: (state, action) => ({
       ...state,
       cartDeatilInfo: action.payload,
     }),

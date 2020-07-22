@@ -90,6 +90,7 @@ router.post('/products', (req, res) => {
 router.get('/product_id', (req, res) => {
   let { productId, type } = req.query;
 
+  // 장바구니에서 요창한 경우
   if (type === 'array') {
     const ids = productId.split(',');
     productId = ids.map((id) => id);

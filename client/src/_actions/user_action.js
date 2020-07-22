@@ -8,6 +8,7 @@ import {
   REGISTER_USER_FAILUER,
   ADD_TO_CART,
   GET_CART_PRODUCTS,
+  REMOVE_CART_ITEM,
 } from './types';
 import { USER_SERVER, PRODUCT_SERVER } from '../utils/serverRoute';
 
@@ -82,6 +83,28 @@ export const getCartProducts = (cartItems, userCartInfo) => {
 
   return {
     type: GET_CART_PRODUCTS,
+    payload: request,
+  };
+};
+
+// 장바구니에서 선택한 상품 삭제
+export const removeCartItem = (productId) => {
+  const request = axios.get(`${USER_SERVER}/removeFromCart?productId=${productId}`).then((res) => {
+    // res.data.cartInfo : 장바구니 상품의 정보 (id, qunatity, data )
+    // productDetailInfo => productInfo + cartInfo의 상품 quantity 정보 추가
+    res.data.cartInfo.forEach((cartItem) => {
+      res.data.productInfo.forEach((product, index) => {
+        if (product._id === cartItem.id) {
+          res.data.productInfo[index].quantity = cartItem.quantity;
+        }
+      });
+    });
+    return res.data.productInfo;
+  });
+
+  // 리듀서 상태 업데이트
+  return {
+    type: REMOVE_CART_ITEM,
     payload: request,
   };
 };
