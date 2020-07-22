@@ -3,23 +3,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getCartProducts } from '../../../_actions/user_action';
 import UserCardBlock from './Sections/UserCardBlock';
 import { removeCartItem } from '../../../_actions/user_action';
+import { Empty } from 'antd';
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const cartDeatilInfo = useSelector((state) => state.user.cartDeatilInfo);
   const [price, setPrice] = useState(0);
+  const [showPrice, setShowPrice] = useState(false);
 
   // Product 콜랙션의 정보 + User 콜렉션의 quantity 해야함
   // 리덕스 user state의 cart 확인
   useEffect(() => {
     const cartItems = [];
-    if (userInfo && userInfo.cart) {
-      // cart안에 product가 있는지 확인
-      if (userInfo.cart.length > 0) {
-        // 있으면 상품의 id 배열에 저장
-        userInfo.cart.forEach((product) => cartItems.push(product.id));
-      }
+    // cart안에 product가 있는지 확인
+    if (userInfo && userInfo.cart.length !== 0) {
+      // 있으면 상품의 id 배열에 저장
+      userInfo.cart.forEach((product) => cartItems.push(product.id));
       // cart안의 상품 정보,
       dispatch(getCartProducts(cartItems, userInfo.cart)).then((res) => getTotalPrice(res.payload));
     }
@@ -33,11 +33,17 @@ const CartPage = () => {
       totalPrice += product.price * product.quantity;
     });
     setPrice(totalPrice);
+    setShowPrice(true);
   };
 
   // 장바구니 상품 제거 버튼
   const removeFromCart = (productId) => {
-    dispatch(removeCartItem(productId)).then((res) => console.log(res));
+    dispatch(removeCartItem(productId)).then((res) => {
+      // 장바구니가 비었다면
+      if (res.payload.productInfo.length <= 0) {
+        setShowPrice(false);
+      }
+    });
   };
 
   return (
@@ -45,9 +51,17 @@ const CartPage = () => {
       <h1>My Cart</h1>
       {/* 장바구니 상품 목록 */}
       <UserCardBlock products={cartDeatilInfo} removeFromCart={removeFromCart} />
-      <div style={{ marginTop: '3rem' }}>
-        <span style={{ fontSize: '20px' }}>Total Amount: ${price}</span>
-      </div>
+
+      {showPrice ? (
+        <div style={{ marginTop: '3rem' }}>
+          <span style={{ fontSize: '20px' }}>Total Amount: ${price}</span>
+        </div>
+      ) : (
+        <div style={{ marginTop: '2rem' }}>
+          <Empty />
+          <span>No Item In the Cart</span>
+        </div>
+      )}
     </div>
   );
 };

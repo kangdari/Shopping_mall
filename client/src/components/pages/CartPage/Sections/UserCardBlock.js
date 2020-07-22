@@ -12,7 +12,7 @@ const UserCardBlock = ({ products, removeFromCart }) => {
   };
 
   const renderItems = () =>
-    products
+    products.length !== 0
       ? products.map((product) => (
           <tr key={product._id}>
             <td>
@@ -22,7 +22,6 @@ const UserCardBlock = ({ products, removeFromCart }) => {
             <td>${product.price}</td>
             <td>
               <button onClick={() => removeFromCart(product._id)}>remove</button>
-              {/* <button onClick={removeFromCart(productId)}>remove</button> */}
             </td>
           </tr>
         ))
