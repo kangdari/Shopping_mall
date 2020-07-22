@@ -12,14 +12,18 @@ const DetailProductPage = ({ match }) => {
 
   useEffect(() => {
     // Product 하나의 정보만 가져오므로 type=single
-    axios.get(`${PRODUCT_SERVER}/product_id?productId=${productId}&type=single`).then((res) => {
-      if (res.data.success) {
-        // 서버에서 가져온 상세 정보를 state로 저장
+    axios
+      .get(`${PRODUCT_SERVER}/product_id?productId=${productId}&type=single`)
+      .then((res) => {
         setProduct(res.data.productInfo[0]);
-      } else {
-        alert('상세 데이터 가져오기 실패');
-      }
-    });
+        // if (res.data.success) {
+        //   // 서버에서 가져온 상세 정보를 state로 저장
+        //   setProduct(res.data.productInfo[0]);
+        // } else {
+        //   alert('상세 데이터 가져오기 실패');
+        // }
+      })
+      .catch((err) => alert(err));
   }, [productId]);
 
   return (

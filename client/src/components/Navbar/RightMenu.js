@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Button from '../Common/Button';
 import { Badge } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';

@@ -11,6 +11,7 @@ export default (SpecificComponent, option, adminRoute = null) => {
   const AuthenticationCheck = (props) => {
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.auth.auth);
+    const user = useSelector((state) => state.user);
 
     useEffect(() => {
       dispatch(authCheck()).then((res) => {
@@ -33,7 +34,7 @@ export default (SpecificComponent, option, adminRoute = null) => {
       });
     }, [props.history, dispatch]);
     // 컴포넌트를 반환
-    return <SpecificComponent {...props} auth={auth} />;
+    return <SpecificComponent {...props} auth={auth} user={user} />;
   };
 
   return AuthenticationCheck;
