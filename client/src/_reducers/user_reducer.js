@@ -9,6 +9,7 @@ import {
   AUTH_CHECK,
   GET_CART_PRODUCTS,
   REMOVE_CART_ITEM,
+  SUCCESS_BUY,
 } from '../_actions/types';
 
 const initialState = {
@@ -61,6 +62,14 @@ const user = handleActions(
       },
       // productInfo = cartInfo + user의 cart quantity
       cartDeatilInfo: action.payload.productInfo,
+    }),
+    [SUCCESS_BUY]: (state, action) => ({
+      ...state,
+      cartDeatilInfo: action.payload.cartDeatilInfo,
+      userInfo: {
+        ...state.userInfo,
+        cart: action.payload.cart,
+      },
     }),
     // AUTH_CHECK 액션 발생 시 user 상태도 업데이트
     [AUTH_CHECK]: (state, action) => ({

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose;
 
-const paymentSchema =
-  ({
+const paymentSchema = mongoose.Schema(
+  {
     user: {
       type: Array,
       default: [],
@@ -16,7 +16,8 @@ const paymentSchema =
       default: [],
     },
   },
-  { timestamps: true });
+  { timestamps: true }
+);
 
 const Payment = Schema.model('Payment', paymentSchema);
 

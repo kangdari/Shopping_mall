@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../model/Users');
 const { Product } = require('../model/Product');
+const { Payment } = require('../model/Payment');
 const { auth } = require('../middleware/auth');
-const { request } = require('express');
+const async = require('async');
 
 // users
 
@@ -156,6 +157,94 @@ router.get('/removeFromCart', auth, (req, res) => {
           if (err) res.status(400).json({ success: false, err });
           return res.status(200).json({ cartInfo, productInfo });
         });
+    }
+  );
+});
+
+// paypal 구매 성공
+router.post('/successBuy', auth, (req, res) => {
+  // User 컬렉션의 history 필드에 결제 정보를 저장
+  let history = [];
+  let transactionData = {};
+
+  // price(pin):12
+  // sold(pin):0
+  // continents(pin):3
+  // views(pin):0
+  // _id(pin):"5f17de43fe2aa92f237109aa"
+  // title(pin):"europe"
+  // description(pin):"d"
+  // createdAt(pin):"2020-07-22T06:35:47.473Z"
+  // updatedAt(pin):"2020-07-22T06:35:47.473Z"
+  // __v(pin):0
+  // quantity(pin):2
+
+  req.body.cartDeatilInfo.forEach((item) => {
+    // history에 cartDeatilInfo에 대한 정보 및 paymentID 저장
+
+    history.push({
+      dataOfPurchase: Date.now(),
+      name: item.title,
+      id: item._id,
+      price: item.price,
+      quantity: item.quantity,
+      paymentId: req.body.paymentData.paymentID,
+    });
+  });
+
+  //
+  // payment 컬렉션안에 자세한 결제 정보 저장
+  transactionData.user = {
+    id: req.user._id,
+    name: req.user.name,
+  };
+
+  transactionData.data = req.body.paymentData;
+  transactionData.product = history;
+  //
+
+  User.findOneAndUpdate(
+    // 현재 유저 찾고
+    { _id: req.user._id },
+    // User 컬렉션의 history 필드에 값을 추가하고 cart 필드는 초기화
+    { $push: { history: history }, $set: { cart: [] } },
+    { new: true },
+    (err, userInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+
+      // Payment 모델에 transactionData 데이터 저장
+      const payment = new Payment(transactionData);
+      payment.save((err, paymentInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        // 상품 당 몇개의 quantity를 구매했는지 products 배열에 정리
+        let products = [];
+        paymentInfo.product.forEach((item) =>
+          products.push({
+            id: item.id,
+            quantity: item.quantity,
+          })
+        );
+        async.eachSeries(
+          products,
+          (item, callback) => {
+            Product.updateOne(
+              { _id: item.id },
+              // Product 컬렉션의 sold 필드 정보 업데이트
+              { $inc: { sold: item.quantity } },
+              { new: false },
+              callback
+            );
+          },
+          (err) => {
+            if (err) return res.status(400).json({ success: false, err });
+            res.status(200).json({
+              success: true,
+              cart: userInfo.cart,
+              cartDeatilInfo: [],
+            });
+          }
+        );
+      });
     }
   );
 });
