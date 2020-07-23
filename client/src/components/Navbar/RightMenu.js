@@ -17,7 +17,7 @@ const RightMenu = () => {
   // 유저의 장바구니 상품 총 개수 구하기
   useEffect(() => {
     let total = 0;
-    if (userInfo) {
+    if (userInfo.cart && userInfo.cart.length > 0) {
       userInfo.cart.forEach((item) => (total += item.quantity));
     }
     setCount(total);
@@ -37,6 +37,7 @@ const RightMenu = () => {
   } else {
     return (
       <>
+        <Button to='/history'>History</Button>
         <Button to='/product/upload'>Upload</Button>
         <Badge count={count} style={{ right: 12, top: 2 }}>
           <Button to='/user/cart'>

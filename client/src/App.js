@@ -7,6 +7,7 @@ import RegisterPage from './components/pages/RegisterPage/RegisterPage';
 import UploadProductPage from './components/pages/UploadProductPage/UploadProductPage';
 import DetailProductPage from './components/pages/DetailProuctPage/DetailProductPage';
 import CartPage from './components/pages/CartPage/CartPage';
+import HisotryPage from './components/pages/HistoryPage/HistoryPage';
 
 import NavBar from './components/Navbar/Navbar';
 
@@ -26,6 +27,7 @@ function App() {
           <Route path='/product/upload' component={Auth(UploadProductPage, true)} />
           <Route path='/product/:productId' component={Auth(DetailProductPage, null)} />
           <Route path='/user/cart' component={Auth(CartPage, true)} />
+          <Route path='/history' component={Auth(HisotryPage, true)} />
         </Switch>
       </div>
     </>
